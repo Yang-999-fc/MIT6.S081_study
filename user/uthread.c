@@ -33,11 +33,11 @@ struct context {
 struct thread {
   char       stack[STACK_SIZE]; /* the thread's stack */
   int        state;             /* FREE, RUNNING, RUNNABLE */
-  struct context ctx;
+  struct context ctx;// 在 thread 中添加 context 结构体
 };
 struct thread all_thread[MAX_THREAD];
 struct thread *current_thread;
-extern void thread_switch(struct context* old, struct context* new);
+extern void thread_switch(struct context* old, struct context* new);// 修改 thread_switch 函数声明,上下文结构体作为参数
 
 void 
 thread_init(void)
@@ -78,11 +78,18 @@ thread_schedule(void)
     next_thread->state = RUNNING;
     t = current_thread;
     current_thread = next_thread;
-    thread_switch(&t->ctx, &next_thread->ctx);
+    /* YOUR CODE HERE
+     * Invoke thread_switch to switch from t to next_thread:
+     * thread_switch(??, ??);
+     */
+    thread_switch(&t->ctx, &next_thread->ctx);//上下文切换，ctx就是context
   } else
     next_thread = 0;
 }
-
+/*该函数用于创建新线程。它接受一个函数指针作为参数，该指针指向新线程需要执行的函数。函数首先遍历一个包含所有线程信息的数组，
+找到一个状态为FREE的线程结构体，将其状态修改为RUNNABLE，并设置线程的返回地址和栈指针。返回地址是新线程函数的起始地址，
+栈指针则指向线程的独立栈空间的最高地址。这样，当线程切换到该线程时，就会从新线程函数的起始地址开始执行，并使用其独立的栈空间。
+*/
 void 
 thread_create(void (*func)())
 {
@@ -92,11 +99,12 @@ thread_create(void (*func)())
     if (t->state == FREE) break;
   }
   t->state = RUNNABLE;
-  t->ctx.ra = (uint64)func;       // return address
-  // thread_switch will return to ra, thus running the thread
-  t->ctx.sp = (uint64)&t->stack + (STACK_SIZE - 1);  // stack pointer
-  // set thread's stack pointer to it's own stack, notice that stack grows from high address to low address
-  // so it starts from the highest address of t->stack;
+  // YOUR CODE HERE
+  t->ctx.ra = (uint64)func; //返回地址
+  // thread_switch 的结尾会返回到 ra，从而运行线程代码
+  t->ctx.sp = (uint64)&t -> stack + (STACK_SIZE - 1);// 栈指针
+  // 将线程的栈指针指向其独立的栈，注意到栈的生长是从高地址到低地址，所以
+  // 要将 sp 设置为指向 stack 的最高地址
 }
 
 void 
