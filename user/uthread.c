@@ -10,7 +10,7 @@
 #define STACK_SIZE  8192
 #define MAX_THREAD  4
 
-// Saved registers for thread context switches.
+// Saved registers for kernel context switches.借鉴proc中的context结构体表示上下文
 struct context {
   uint64 ra;
   uint64 sp;
