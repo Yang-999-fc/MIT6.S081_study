@@ -1,14 +1,14 @@
-	.text
+.text
 
 	/*
-		 * save the old thread's registers,
-		 * restore the new thread's registers.
-		 */
+         * 保存旧的线程状态 thread's registers,
+         * 载入新的线程状态（要切换的） thread's registers.
+         */
 
-// context switches will always be on function call barriers, so it's not necessary to save caller-saved registers.
-// trapframe on the other hand, must save all registers since it can happen anywhere during the execution of function,
-// not only on function call barriers.
-
+	.globl thread_switch
+thread_switch:
+	/* YOUR CODE HERE */
+	ret    /* return to ra */
 // void thread_switch(struct context *old, struct context *new);
 	.globl thread_switch
 thread_switch:
