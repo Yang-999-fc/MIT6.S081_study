@@ -4,12 +4,12 @@
 
 #define MBUF_SIZE              2048
 #define MBUF_DEFAULT_HEADROOM  128
-
+//构建数据链路层（如以太网）或网络层（如IP）的数据包。
 struct mbuf {
-  struct mbuf  *next; // the next mbuf in the chain
-  char         *head; // the current start position of the buffer
-  unsigned int len;   // the length of the buffer
-  char         buf[MBUF_SIZE]; // the backing store
+  struct mbuf  *next; // 链表中的下一个mbuf
+  char         *head; // 当前缓冲区的起始位置
+  unsigned int len;   // 缓冲区的长度
+  char         buf[MBUF_SIZE]; // 缓冲区的存储空间
 };
 
 char *mbufpull(struct mbuf *m, unsigned int len);
